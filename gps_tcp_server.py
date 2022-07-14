@@ -23,9 +23,28 @@ from dateutil import tz
 import googlemaps
 import math
 import os
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import firestore
+
+def init_firebase():
+    # Use the application default credentials
+    cred = credentials.ApplicationDefault()
+    firebase_admin.initialize_app(cred, {
+        'projectId': 'pawmark',
+    })
+
+    database = firestore.AsyncClient()
+    doc_ref = database.collection('locations').document('alovelace')
+    doc_ref.set({
+        'first': 'Ada',
+        'last': 'Lovelace',
+        'born': 1815
+    })
 
 
 def accept_incoming_connections():
+    init_firebase()
     """
     Accepts any incoming client connexion 
     and starts a dedicated thread for each client.

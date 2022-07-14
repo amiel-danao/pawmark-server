@@ -3,6 +3,17 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+.DS_Store
+.env
+logs/server_log.txt
+logs/location_log.txt
+logs/location_log_old.txt
+logs/location_log_old_newformat.txt
+.Rproj.user
+PetGPS_UI_RShiny/
+myenv
+.vscode
+
 # C extensions
 *.so
 
