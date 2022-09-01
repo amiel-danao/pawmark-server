@@ -27,6 +27,11 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
 
+DATABASE = None
+DB_REF = None
+LONGITUDE_KEY = 'longitude'
+LATITUDE_KEY = 'latitude'
+
 def init_firebase():
     # Use the application default credentials
     cred = credentials.ApplicationDefault()
@@ -34,13 +39,27 @@ def init_firebase():
         'projectId': 'pawmark',
     })
 
-    database = firestore.AsyncClient()
-    doc_ref = database.collection('locations').document('alovelace')
-    doc_ref.set({
-        'first': 'Ada',
-        'last': 'Lovelace',
-        'born': 1815
-    })
+    global DATABASE
+    DATABASE = firestore.AsyncClient()
+    
+
+def update_db_ref(imei):
+    if DATABASE is None:
+        print('Database is not initialized! run init_firebase() first!')
+        return
+
+    global DB_REF
+    DB_REF = DATABASE.collection('locations').document(imei)
+
+
+def write_location_to_database(location):
+    if DB_REF is None:
+        return
+    DB_REF.set({
+        LONGITUDE_KEY : location[LONGITUDE_KEY],
+        LATITUDE_KEY : location[LATITUDE_KEY],
+        'date' : firestore.SERVER_TIMESTAMP
+    }, merge=True)
 
 
 def accept_incoming_connections():
@@ -325,6 +344,10 @@ def answer_gps(client, query):
     positions[client]['gps']['heading'] = gps_heading
     print('[', addresses[client]['address'][0], ']', "POSITION/GPS : Valid =", position_is_valid, "; Nb Sat =", gps_nb_sat, "; Lat =", gps_latitude, "; Long =", gps_longitude, "; Speed =", gps_speed, "; Heading =", gps_heading)
     LOGGER('location', 'location_log.txt', addresses[client]['address'][0], addresses[client]['imei'], '', positions[client]['gps'])
+    if DB_REF is None:
+        update_db_ref(addresses[client]['imei'])
+
+    write_location_to_database(positions[client]['gps'])
 
     # Get current datetime for answering
     # TEST: Return datetime that was extracted from packet instead of current server datetime
