@@ -52,10 +52,10 @@ def update_db_ref(imei):
     DB_REF = DATABASE.collection('locations').document(imei)
 
 
-def write_location_to_database(location):
+async def write_location_to_database(location):
     if DB_REF is None:
         return
-    DB_REF.set({
+    await DB_REF.set({
         LONGITUDE_KEY : location[LONGITUDE_KEY],
         LATITUDE_KEY : location[LATITUDE_KEY],
         'date' : firestore.SERVER_TIMESTAMP
