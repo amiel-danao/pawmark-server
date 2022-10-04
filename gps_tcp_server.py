@@ -42,7 +42,7 @@ def init_firebase():
     # })
     # Use the application default credentials.
     cred = credentials.ApplicationDefault()
-
+    LOGGER('database', 'database_log.txt', 'cred initialized')
     firebase_admin.initialize_app(cred)
     global DATABASE
     DATABASE = firestore.client()
@@ -50,11 +50,12 @@ def init_firebase():
 
 def update_db_ref(imei):
     if DATABASE is None:
-        print('Database is not initialized! run init_firebase() first!')
+        LOGGER('database', 'database_log.txt', 'Database is not initialized! run init_firebase() first!')
         return
 
     global DB_REF
     DB_REF = DATABASE.collection('locations').document(imei)
+    LOGGER('database', 'database_log.txt', 'db_ref initialized')
 
 def write_location_to_database(location):
     if DB_REF is None:
@@ -64,6 +65,7 @@ def write_location_to_database(location):
         LATITUDE_KEY : location[LATITUDE_KEY],
         'date' : firestore.SERVER_TIMESTAMP
     }, merge=True)
+    LOGGER('database', 'database_log.txt', 'Write location completed')
 
 
 def accept_incoming_connections():
@@ -85,7 +87,7 @@ def accept_incoming_connections():
         addresses[client]['address'] = client_address
         Thread(target=handle_client, args=(client,)).start()
 
-def LOGGER(event, filename, ip, client, type, data):
+def LOGGER(event, filename, ip=None, client=None, type=None, data=None):
     """
     A logging function to store all input packets, 
     as well as output ones when they are generated.
@@ -104,6 +106,8 @@ def LOGGER(event, filename, ip, client, type, data):
         elif (event == 'location'):
             # TSV format of: Timestamp, Client IP, Location DateTime, GPS/LBS, Validity, Nb Sat, Latitude, Longitude, Accuracy, Speed, Heading
             logMessage = datetime.now().strftime('%Y/%m/%d %H:%M:%S') + '\t' + ip + '\t' + client + '\t' + '\t'.join(list(str(x) for x in data.values())) + '\n'
+        elif (event == 'database'):
+            logMessage = ip
         log.write(logMessage)
 
 
