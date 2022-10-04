@@ -32,15 +32,20 @@ DB_REF = None
 LONGITUDE_KEY = 'longitude'
 LATITUDE_KEY = 'latitude'
 
+
+
 def init_firebase():
     # Use the application default credentials
+    # cred = credentials.ApplicationDefault()
+    # firebase_admin.initialize_app(cred, {
+    #     'projectId': 'pawmark',
+    # })
+    # Use the application default credentials.
     cred = credentials.ApplicationDefault()
-    firebase_admin.initialize_app(cred, {
-        'projectId': 'pawmark',
-    })
 
+    firebase_admin.initialize_app(cred)
     global DATABASE
-    DATABASE = firestore.AsyncClient()
+    DATABASE = firestore.client()
     
 
 def update_db_ref(imei):
@@ -51,11 +56,10 @@ def update_db_ref(imei):
     global DB_REF
     DB_REF = DATABASE.collection('locations').document(imei)
 
-
-async def write_location_to_database(location):
+def write_location_to_database(location):
     if DB_REF is None:
         return
-    await DB_REF.set({
+    DB_REF.set({
         LONGITUDE_KEY : location[LONGITUDE_KEY],
         LATITUDE_KEY : location[LATITUDE_KEY],
         'date' : firestore.SERVER_TIMESTAMP
