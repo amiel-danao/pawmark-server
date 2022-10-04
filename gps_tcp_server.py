@@ -69,7 +69,7 @@ def write_location_to_database(location):
 
 
 def accept_incoming_connections():
-    #init_firebase()
+    init_firebase()
     """
     Accepts any incoming client connexion 
     and starts a dedicated thread for each client.
