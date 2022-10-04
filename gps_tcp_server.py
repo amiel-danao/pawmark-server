@@ -69,7 +69,7 @@ def write_location_to_database(location):
 
 
 def accept_incoming_connections():
-    init_firebase()
+    #init_firebase()
     """
     Accepts any incoming client connexion 
     and starts a dedicated thread for each client.
@@ -107,7 +107,7 @@ def LOGGER(event, filename, ip=None, client=None, type=None, data=None):
             # TSV format of: Timestamp, Client IP, Location DateTime, GPS/LBS, Validity, Nb Sat, Latitude, Longitude, Accuracy, Speed, Heading
             logMessage = datetime.now().strftime('%Y/%m/%d %H:%M:%S') + '\t' + ip + '\t' + client + '\t' + '\t'.join(list(str(x) for x in data.values())) + '\n'
         elif (event == 'database'):
-            logMessage = ip
+            logMessage = ip + '\n'
         log.write(logMessage)
 
 
