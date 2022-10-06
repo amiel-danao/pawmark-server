@@ -49,22 +49,28 @@ def init_firebase():
     
 
 def update_db_ref(imei):
-    if DATABASE is None:
-        LOGGER('database', 'database_log.txt', 'Database is not initialized! run init_firebase() first!')
-        return
+    try:
+        if DATABASE is None:
+            LOGGER('database', 'database_log.txt', 'Database is not initialized! run init_firebase() first!')
+            return
 
-    global DB_REF
-    DB_REF = DATABASE.collection('locations').document(imei)
+        global DB_REF
+        DB_REF = DATABASE.collection('locations').document(imei)
+    except Exception as e:
+        LOGGER('database', 'database_log.txt', e)
     LOGGER('database', 'database_log.txt', 'db_ref initialized')
 
 def write_location_to_database(location):
-    if DB_REF is None:
-        return
-    DB_REF.set({
-        LONGITUDE_KEY : location[LONGITUDE_KEY],
-        LATITUDE_KEY : location[LATITUDE_KEY],
-        'date' : firestore.SERVER_TIMESTAMP
-    }, merge=True)
+    try:
+        if DB_REF is None:
+            return
+        DB_REF.set({
+            LONGITUDE_KEY : location[LONGITUDE_KEY],
+            LATITUDE_KEY : location[LATITUDE_KEY],
+            'date' : firestore.SERVER_TIMESTAMP
+        }, merge=True)
+    except Exception as e:
+        LOGGER('database', 'database_log.txt', e)
     LOGGER('database', 'database_log.txt', 'Write location completed')
 
 
