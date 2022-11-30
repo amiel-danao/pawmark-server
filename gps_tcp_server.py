@@ -41,7 +41,7 @@ def init_firebase():
     #     'projectId': 'pawmark',
     # })
     # Use the application default credentials.
-    cred = credentials.Certificate("/home/amiel_anbrs/pawmark-firebase-adminsdk-4g25g-d88a0c4a3d.json")
+    cred = credentials.Certificate("pawmark-firebase-adminsdk-4g25g-1025ff6221.json")
     firebase_admin.initialize_app(cred)
     LOGGER('database', 'database_log.txt', 'cred initialized')
     global DATABASE
