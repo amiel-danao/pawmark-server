@@ -35,12 +35,6 @@ LATITUDE_KEY = 'latitude'
 
 
 def init_firebase():
-    # Use the application default credentials
-    # cred = credentials.ApplicationDefault()
-    # firebase_admin.initialize_app(cred, {
-    #     'projectId': 'pawmark',
-    # })
-    # Use the application default credentials.
     cred = credentials.Certificate("pawmark-firebase-adminsdk-4g25g-1025ff6221.json")
     firebase_admin.initialize_app(cred)
     LOGGER('database', 'database_log.txt', 'cred initialized')
