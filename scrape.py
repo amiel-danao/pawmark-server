@@ -11,6 +11,7 @@ DB_REF = None
 LONGITUDE_KEY = 'longitude'
 LATITUDE_KEY = 'latitude'
 IMEI = '359339077128046'
+PASSWORD = '123456'
 
 
 def update_db_ref(imei):
@@ -71,6 +72,6 @@ def scrape():
     
 
 def start_thread():
-    threading.Timer(20, scrape).start()
+    threading.Timer(10, scrape).start()
 
 init_firebase()

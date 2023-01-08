@@ -750,8 +750,8 @@ protocol_dict = {
 
 # Import dotenv with API keys and initialize API connections
 load_dotenv()
-GMAPS_API_KEY = os.getenv('GMAPS_API_KEY')
-gmaps = googlemaps.Client(key=GMAPS_API_KEY)
+# GMAPS_API_KEY = os.getenv('GMAPS_API_KEY')
+# gmaps = googlemaps.Client(key=GMAPS_API_KEY)
 
 # Details about host server
 HOST = ''
